@@ -57,7 +57,7 @@ export default class HomePass extends BaseModel {
   declare no: string
 
   @column()
-  declare unit: string
+  declare unit: string | null
 
   @column()
   declare popId: string
@@ -70,4 +70,7 @@ export default class HomePass extends BaseModel {
 
   @column()
   declare rfsDate: Date
+
+  @column()
+  declare distance_meters?: number
 }
