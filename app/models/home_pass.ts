@@ -72,5 +72,5 @@ export default class HomePass extends BaseModel {
   declare rfsDate: Date
 
   @column()
-  declare distance_meters?: number
+  declare distanceMeters?: number
 }

@@ -9,7 +9,7 @@ export class HomepassService {
    * @param page number
    * @param limit number
    */
-  async find(
+  async findAll(
     longitude: number,
     latitude: number,
     page: number,
