@@ -7,7 +7,7 @@ services:
     ports:
       - '${PORT:-3333}:3333'
     env_file:
-      - .env
+      - .env.prod
     restart: always
     depends_on:
       - postgres
@@ -19,7 +19,7 @@ services:
     container_name: postgres_postgis
     restart: always
     env_file:
-      - .env
+      - .env.prod
     environment:
       - POSTGRES_USER=${DB_USER:-postgres}
       - POSTGRES_PASSWORD=${DB_PASSWORD:-postgres}
