@@ -23,7 +23,7 @@ services:
     environment:
       - POSTGRES_USER=${DB_USER:-postgres}
       - POSTGRES_PASSWORD=${DB_PASSWORD:-postgres}
-      - POSTGRES_DB=${DB_DATABASE:-fiberstar} # default DB langsung fiberstar
+      - POSTGRES_DB=${DB_DATABASE:-fiberstar}
     ports:
       - '${DB_PORT:-5432}:5432'
     volumes:
