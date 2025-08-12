@@ -25,7 +25,7 @@ services:
       - POSTGRES_PASSWORD=${DB_PASSWORD:-postgres}
       - POSTGRES_DB=${DB_DATABASE:-postgres}
     ports:
-      - '${DB_PORT:-5432}:${DB_PORT:-5432}'
+      - '${DB_PORT:-5432}:5432'
     volumes:
       - /home/fajar/postgresql/data:/var/lib/postgresql/data
     networks:
