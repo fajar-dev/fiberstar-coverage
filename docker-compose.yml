@@ -27,7 +27,7 @@ services:
     ports:
       - '6543:5432'
     volumes:
-      - /home/fajar/postgresql/data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - coverage_network
 

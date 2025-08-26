@@ -54,13 +54,13 @@ export default class HomePass extends BaseModel {
   declare streetName: string
 
   @column()
-  declare no: string
+  declare no: string | null
 
   @column()
   declare unit: string | null
 
   @column()
-  declare popId: string
+  declare popId: string | null
 
   @column()
   declare splitterId: string

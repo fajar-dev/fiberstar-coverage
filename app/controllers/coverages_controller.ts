@@ -22,10 +22,22 @@ export default class CoveragesController {
       page,
       limit
     )
-    // return result
     return Response.ok(
       response,
       await this.coverageSerializer.collection(result),
+      'Home Pass retrieved successfully'
+    )
+  }
+
+  async find({ request, response }: HttpContext) {
+    const payload = await request.validateUsing(coverageCheck)
+    const result = await this.homepassService.findOne(payload.longitude, payload.latitude)
+    if (!result) {
+      return Response.notFound(response, 'Home Pass not found')
+    }
+    return Response.ok(
+      response,
+      await this.coverageSerializer.single(result),
       'Home Pass retrieved successfully'
     )
   }

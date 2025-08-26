@@ -18,9 +18,9 @@ interface CoverageSerializeInterface {
   residentType: string
   residentName: string
   streetName: string
-  no: string
+  no: string | null
   unit: string | null
-  popId: string
+  popId: string | null
   splitterId: string
   spliterDistribusiKoordinat: string
   rfsDate: Date

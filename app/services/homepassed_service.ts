@@ -31,4 +31,26 @@ export class HomepassService {
 
     return query
   }
+
+  /**
+   * @param longitude string
+   * @param latitude string
+   */
+  async findOne(longitude: number, latitude: number): Promise<HomePass | null> {
+    const pointSql = 'ST_SetSRID(ST_MakePoint(?, ?), 4326)'
+
+    const query = await HomePass.query()
+      .select(
+        '*',
+        db.rawQuery(
+          `ST_Distance(homepassed_coordinate_geo::geography, ${pointSql}::geography) AS distance_meters`,
+          [longitude, latitude]
+        )
+      )
+      .whereNotNull('homepassed_coordinate_geo')
+      .orderByRaw(`homepassed_coordinate_geo <-> ${pointSql}`, [longitude, latitude])
+      .first()
+
+    return query
+  }
 }
