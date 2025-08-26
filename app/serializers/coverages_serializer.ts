@@ -21,8 +21,8 @@ interface CoverageSerializeInterface {
   no: string | null
   unit: string | null
   popId: string | null
-  splitterId: string
-  spliterDistribusiKoordinat: string
+  splitterId: string | null
+  spliterDistribusiKoordinat: string | null
   rfsDate: Date
   distance: number
 }
@@ -73,7 +73,13 @@ export default class CoverageSerialize {
     }
   }
 
-  async collection(datas: ModelPaginatorContract<HomePass>): Promise<PaginatedResponse> {
+  // untuk array biasa (misalnya hasil limit)
+  async collection(datas: HomePass[]): Promise<CoverageSerializeInterface[]> {
+    return Promise.all(datas.map((homePass: HomePass) => this.single(homePass)))
+  }
+
+  // untuk hasil paginate()
+  async paginate(datas: ModelPaginatorContract<HomePass>): Promise<PaginatedResponse> {
     return {
       meta: datas.getMeta(),
       data: await Promise.all(datas.all().map((homePass: HomePass) => this.single(homePass))),

@@ -4,8 +4,8 @@ import { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 
 export class HomepassService {
   /**
-   * @param longitude string
-   * @param latitude string
+   * @param longitude number
+   * @param latitude number
    * @param page number
    * @param limit number
    */
@@ -33,10 +33,11 @@ export class HomepassService {
   }
 
   /**
-   * @param longitude string
-   * @param latitude string
+   * @param longitude number
+   * @param latitude number
+   * @param limit number
    */
-  async findOne(longitude: number, latitude: number): Promise<HomePass | null> {
+  async find(longitude: number, latitude: number, limit: number): Promise<HomePass[]> {
     const pointSql = 'ST_SetSRID(ST_MakePoint(?, ?), 4326)'
 
     const query = await HomePass.query()
@@ -49,7 +50,7 @@ export class HomepassService {
       )
       .whereNotNull('homepassed_coordinate_geo')
       .orderByRaw(`homepassed_coordinate_geo <-> ${pointSql}`, [longitude, latitude])
-      .first()
+      .limit(limit)
 
     return query
   }

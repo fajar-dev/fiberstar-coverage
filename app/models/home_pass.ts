@@ -63,10 +63,10 @@ export default class HomePass extends BaseModel {
   declare popId: string | null
 
   @column()
-  declare splitterId: string
+  declare splitterId: string | null
 
   @column()
-  declare spliterDistribusiKoordinat: string
+  declare spliterDistribusiKoordinat: string | null
 
   @column()
   declare rfsDate: Date
