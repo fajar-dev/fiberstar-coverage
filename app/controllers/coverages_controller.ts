@@ -30,9 +30,11 @@ export default class CoveragesController {
   }
 
   async find({ request, response }: HttpContext) {
-    const limit = request.input('limit', 3)
-    const payload = await request.validateUsing(coverageCheck)
-    const result = await this.homepassService.find(payload.longitude, payload.latitude, limit)
+    const longitude = request.input('longitude', 0)
+    const latitude = request.input('latitude', 10)
+    const radius = request.input('radius', 10)
+    const limit = request.input('limit', 10)
+    const result = await this.homepassService.find(longitude, latitude, radius, limit)
     return Response.ok(
       response,
       await this.coverageSerializer.collection(result),

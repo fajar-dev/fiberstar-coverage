@@ -10,4 +10,5 @@
 const CoveragesController = () => import('#controllers/coverages_controller')
 import router from '@adonisjs/core/services/router'
 
-router.post('/coverage', [CoveragesController, 'find'])
+router.post('/list', [CoveragesController, 'index'])
+router.get('/coverage', [CoveragesController, 'find'])

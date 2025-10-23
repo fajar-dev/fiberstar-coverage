@@ -35,9 +35,15 @@ export class HomepassService {
   /**
    * @param longitude number
    * @param latitude number
+   * @param radius number (meter)
    * @param limit number
    */
-  async find(longitude: number, latitude: number, limit: number): Promise<HomePass[]> {
+  async find(
+    longitude: number,
+    latitude: number,
+    radius: number,
+    limit: number
+  ): Promise<HomePass[]> {
     const pointSql = 'ST_SetSRID(ST_MakePoint(?, ?), 4326)'
 
     const query = await HomePass.query()
@@ -49,6 +55,11 @@ export class HomepassService {
         )
       )
       .whereNotNull('homepassed_coordinate_geo')
+      .andWhereRaw(`ST_DWithin(homepassed_coordinate_geo::geography, ${pointSql}::geography, ?)`, [
+        longitude,
+        latitude,
+        radius,
+      ])
       .orderByRaw(`homepassed_coordinate_geo <-> ${pointSql}`, [longitude, latitude])
       .limit(limit)
 
