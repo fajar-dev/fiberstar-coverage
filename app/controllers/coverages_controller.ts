@@ -30,11 +30,17 @@ export default class CoveragesController {
   }
 
   async find({ request, response }: HttpContext) {
-    const longitude = request.input('longitude', 0)
-    const latitude = request.input('latitude', 10)
-    const radius = request.input('radius', 10)
-    const limit = request.input('limit', 10)
+    const longitude = Number(request.input('longitude'))
+    const latitude = Number(request.input('latitude'))
+    const radius = request.input('radius') ? Number(request.input('radius')) : null
+    const limit = request.input('limit') ? Number(request.input('limit')) : null
+
+    if (!longitude || !latitude) {
+      return Response.badRequest(response, 'Longitude and latitude are required')
+    }
+
     const result = await this.homepassService.find(longitude, latitude, radius, limit)
+
     return Response.ok(
       response,
       await this.coverageSerializer.collection(result),

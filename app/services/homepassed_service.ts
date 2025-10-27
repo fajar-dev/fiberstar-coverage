@@ -38,15 +38,16 @@ export class HomepassService {
    * @param radius number (meter)
    * @param limit number
    */
+  // services/HomepassService.ts
   async find(
     longitude: number,
     latitude: number,
-    radius: number,
-    limit: number
+    radius: number | null,
+    limit: number | null
   ): Promise<HomePass[]> {
     const pointSql = 'ST_SetSRID(ST_MakePoint(?, ?), 4326)'
 
-    const query = await HomePass.query()
+    const query = HomePass.query()
       .select(
         '*',
         db.rawQuery(
@@ -55,14 +56,23 @@ export class HomepassService {
         )
       )
       .whereNotNull('homepassed_coordinate_geo')
-      .andWhereRaw(`ST_DWithin(homepassed_coordinate_geo::geography, ${pointSql}::geography, ?)`, [
-        longitude,
-        latitude,
-        radius,
-      ])
-      .orderByRaw(`homepassed_coordinate_geo <-> ${pointSql}`, [longitude, latitude])
-      .limit(limit)
 
-    return query
+    // Jika ada radius → filter pakai ST_DWithin
+    if (radius) {
+      query.andWhereRaw(
+        `ST_DWithin(homepassed_coordinate_geo::geography, ${pointSql}::geography, ?)`,
+        [longitude, latitude, radius]
+      )
+    }
+
+    // Urutkan berdasarkan jarak terdekat
+    query.orderByRaw(`homepassed_coordinate_geo <-> ${pointSql}`, [longitude, latitude])
+
+    // Jika ada limit → batasi jumlah hasil
+    if (limit) {
+      query.limit(limit)
+    }
+
+    return await query
   }
 }
