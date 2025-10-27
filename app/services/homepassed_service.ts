@@ -38,7 +38,6 @@ export class HomepassService {
    * @param radius number (meter)
    * @param limit number
    */
-  // services/HomepassService.ts
   async find(
     longitude: number,
     latitude: number,
