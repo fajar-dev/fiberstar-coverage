@@ -31,6 +31,7 @@ export default class extends BaseSchema {
       table.string('spliter_distribusi_koordinat')
       table.specificType('spliter_distribusi_koordinat_geo', 'geometry(Point,4326)')
       table.date('rfs_date')
+      table.enum('type', ['Fiberstar', 'CGS', 'SIP']).notNullable().defaultTo('Fiberstar')
     })
 
     // Index spasial
