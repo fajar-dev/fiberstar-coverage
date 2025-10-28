@@ -25,6 +25,7 @@ interface CoverageSerializeInterface {
   spliterDistribusiKoordinat: string | null
   rfsDate: Date
   distance: number
+  type: 'Fiberstar' | 'CGS' | 'SIP'
 }
 
 interface PaginationMeta {
@@ -70,6 +71,7 @@ export default class CoverageSerialize {
       spliterDistribusiKoordinat: homePass.spliterDistribusiKoordinat,
       rfsDate: homePass.rfsDate,
       distance: homePass.distanceMeters ?? 0,
+      type: homePass.type as 'Fiberstar' | 'CGS' | 'SIP', // 🆕 Tambahan kolom operator
     }
   }
 
