@@ -75,5 +75,5 @@ export default class HomePass extends BaseModel {
   declare distanceMeters?: number
 
   @column()
-  declare type: 'Fiberstar' | 'CGS' | 'SIP'
+  declare type: string
 }
