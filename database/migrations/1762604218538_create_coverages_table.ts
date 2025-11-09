@@ -1,39 +1,17 @@
 import { BaseSchema } from '@adonisjs/lucid/schema'
 
 export default class extends BaseSchema {
-  protected tableName = 'home_pass'
+  protected tableName = 'coverages'
 
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.string('homepass_id').primary()
-      table.string('project_id')
-      table.string('project_name')
-      table.string('region')
-      table.string('sub_region')
-      table.string('area_name')
-      table.string('province')
-      table.string('city').index()
-      table.string('district')
-      table.string('sub_district')
-      table.integer('postal_code')
       table.string('homepassed_coordinate')
       table.specificType('homepassed_coordinate_geo', 'geometry(Point,4326)')
-      table.string('homepass_type')
-      table.string('resident_type').index()
-      table.string('resident_name')
-      table.string('street_name')
-      table.string('no')
-      table.string('unit').nullable()
-      table.string('pop_id')
-      table.string('splitter_id')
-      table.string('spliter_distribusi_koordinat')
-      table.specificType('spliter_distribusi_koordinat_geo', 'geometry(Point,4326)')
-      table.date('rfs_date')
-      table.enum('type', ['Fiberstar', 'CGS', 'SIP']).notNullable().defaultTo('Fiberstar')
     })
 
     // Gunakan helper functions untuk setup trigger dan index
-    const coordColumns = ['homepassed_coordinate', 'spliter_distribusi_koordinat']
+    const coordColumns = ['homepassed_coordinate']
 
     // Buat spatial indexes
     this.schema.raw(`
@@ -66,9 +44,8 @@ export default class extends BaseSchema {
       DROP FUNCTION IF EXISTS ${this.tableName}_set_geoms();
     `)
 
-    // Drop indexes
+    // Drop index
     this.schema.raw(`DROP INDEX IF EXISTS ${this.tableName}_homepassed_geom_gist`)
-    this.schema.raw(`DROP INDEX IF EXISTS ${this.tableName}_spliter_distribusi_koordinat_geom_gist`)
 
     // Drop table
     this.schema.dropTable(this.tableName)
