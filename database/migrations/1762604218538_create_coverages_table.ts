@@ -4,14 +4,27 @@ export default class extends BaseSchema {
   protected tableName = 'coverages'
 
   public async up() {
+    // Buat ENUM type di PostgreSQL jika belum ada
+    this.schema.raw(`
+      DO $$
+      BEGIN
+        IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'type_enum') THEN
+          CREATE TYPE type_enum AS ENUM ('Fiberstar', 'CGS', 'SIP');
+        END IF;
+      END$$;
+    `)
+
     this.schema.createTable(this.tableName, (table) => {
-      table.string('homepass_id').primary()
-      table.string('homepassed_coordinate')
-      table.specificType('homepassed_coordinate_geo', 'geometry(Point,4326)')
+      table.string('id').primary()
+      table.string('name').nullable()
+      table.string('address')
+      table.string('coordinate')
+      table.specificType('coordinate_geo', 'geometry(Point,4326)')
+      table.specificType('type', 'type_enum').notNullable().defaultTo('Fiberstar')
     })
 
     // Gunakan helper functions untuk setup trigger dan index
-    const coordColumns = ['homepassed_coordinate']
+    const coordColumns = ['coordinate']
 
     // Buat spatial indexes
     this.schema.raw(`
@@ -45,7 +58,7 @@ export default class extends BaseSchema {
     `)
 
     // Drop index
-    this.schema.raw(`DROP INDEX IF EXISTS ${this.tableName}_homepassed_geom_gist`)
+    this.schema.raw(`DROP INDEX IF EXISTS ${this.tableName}_geom_gist`)
 
     // Drop table
     this.schema.dropTable(this.tableName)
