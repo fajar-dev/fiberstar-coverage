@@ -1,13 +1,21 @@
-import { DateTime } from 'luxon'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 
 export default class Coverage extends BaseModel {
   @column({ isPrimary: true })
-  declare id: number
+  declare id: string
 
-  @column.dateTime({ autoCreate: true })
-  declare createdAt: DateTime
+  @column()
+  declare name: string
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime
+  @column()
+  declare address: string
+
+  @column()
+  declare coordinate: string
+
+  @column()
+  declare distanceMeters?: number
+
+  @column()
+  declare type: string
 }

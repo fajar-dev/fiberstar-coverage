@@ -1,8 +1,8 @@
-import HomePass from '#models/home_pass'
+import Coverage from '#models/coverage'
 import db from '@adonisjs/lucid/services/db'
 import { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 
-export class HomepassService {
+export class CoverageService {
   /**
    * @param longitude number
    * @param latitude number
@@ -14,19 +14,19 @@ export class HomepassService {
     latitude: number,
     page: number,
     limit: number
-  ): Promise<ModelPaginatorContract<HomePass>> {
+  ): Promise<ModelPaginatorContract<Coverage>> {
     const pointSql = 'ST_SetSRID(ST_MakePoint(?, ?), 4326)'
 
-    const query = HomePass.query()
+    const query = Coverage.query()
       .select(
         '*',
         db.rawQuery(
-          `ST_Distance(homepassed_coordinate_geo::geography, ${pointSql}::geography) AS distance_meters`,
+          `ST_Distance(coordinate_geo::geography, ${pointSql}::geography) AS distance_meters`,
           [longitude, latitude]
         )
       )
-      .whereNotNull('homepassed_coordinate_geo')
-      .orderByRaw(`homepassed_coordinate_geo <-> ${pointSql}`, [longitude, latitude])
+      .whereNotNull('coordinate_geo')
+      .orderByRaw(`coordinate_geo <-> ${pointSql}`, [longitude, latitude])
       .paginate(page, limit)
 
     return query
@@ -43,29 +43,30 @@ export class HomepassService {
     latitude: number,
     radius: number | null,
     limit: number | null
-  ): Promise<HomePass[]> {
+  ): Promise<Coverage[]> {
     const pointSql = 'ST_SetSRID(ST_MakePoint(?, ?), 4326)'
 
-    const query = HomePass.query()
+    const query = Coverage.query()
       .select(
         '*',
         db.rawQuery(
-          `ST_Distance(homepassed_coordinate_geo::geography, ${pointSql}::geography) AS distance_meters`,
+          `ST_Distance(coordinate_geo::geography, ${pointSql}::geography) AS distance_meters`,
           [longitude, latitude]
         )
       )
-      .whereNotNull('homepassed_coordinate_geo')
+      .whereNotNull('coordinate_geo')
 
     // Jika ada radius → filter pakai ST_DWithin
     if (radius) {
-      query.andWhereRaw(
-        `ST_DWithin(homepassed_coordinate_geo::geography, ${pointSql}::geography, ?)`,
-        [longitude, latitude, radius]
-      )
+      query.andWhereRaw(`ST_DWithin(coordinate_geo::geography, ${pointSql}::geography, ?)`, [
+        longitude,
+        latitude,
+        radius,
+      ])
     }
 
     // Urutkan berdasarkan jarak terdekat
-    query.orderByRaw(`homepassed_coordinate_geo <-> ${pointSql}`, [longitude, latitude])
+    query.orderByRaw(`coordinate_geo <-> ${pointSql}`, [longitude, latitude])
 
     // Jika ada limit → batasi jumlah hasil
     if (limit) {

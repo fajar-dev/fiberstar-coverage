@@ -1,14 +1,14 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Response from '#helpers/response'
 import { inject } from '@adonisjs/core'
-import { HomepassService } from '#services/homepassed_service'
+import { CoverageService } from '#services/coverage_service'
 import { coverageCheck } from '#validators/coverage'
 import CoverageSerialize from '../serializers/coverages_serializer.js'
 
 @inject()
 export default class CoveragesController {
   constructor(
-    private homepassService: HomepassService,
+    private coverageService: CoverageService,
     private coverageSerializer: CoverageSerialize
   ) {}
 
@@ -16,7 +16,7 @@ export default class CoveragesController {
     const page = request.input('page', 1)
     const limit = request.input('limit', 10)
     const payload = await request.validateUsing(coverageCheck)
-    const result = await this.homepassService.findAll(
+    const result = await this.coverageService.findAll(
       payload.longitude,
       payload.latitude,
       page,
@@ -39,7 +39,7 @@ export default class CoveragesController {
       return Response.badRequest(response, 'Longitude and latitude are required')
     }
 
-    const result = await this.homepassService.find(longitude, latitude, radius, limit)
+    const result = await this.coverageService.find(longitude, latitude, radius, limit)
 
     return Response.ok(
       response,
