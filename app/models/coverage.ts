@@ -5,6 +5,12 @@ export default class Coverage extends BaseModel {
   declare id: string
 
   @column()
+  declare homepass_id: string
+
+  @column()
+  declare service_id: string
+
+  @column()
   declare name: string
 
   @column()

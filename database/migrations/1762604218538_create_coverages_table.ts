@@ -15,9 +15,11 @@ export default class extends BaseSchema {
     `)
 
     this.schema.createTable(this.tableName, (table) => {
-      table.string('id').primary()
+      table.increments('id')
+      table.string('homepass_id').nullable()
+      table.string('service_id').nullable()
       table.string('name').nullable()
-      table.string('address')
+      table.string('address').nullable()
       table.string('coordinate')
       table.specificType('coordinate_geo', 'geometry(Point,4326)')
       table.specificType('type', 'type_enum').notNullable().defaultTo('Fiberstar')
