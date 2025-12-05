@@ -5,6 +5,7 @@ interface CoverageSerializeInterface {
   id: string
   serviceId: string
   homepassId: string
+  splitterId: string
   name: string
   address: string
   coordinate: string
@@ -35,6 +36,7 @@ export default class CoverageSerialize {
       id: homePass.id,
       serviceId: homePass.service_id,
       homepassId: homePass.homepass_id,
+      splitterId: homePass.splitter_id,
       name: homePass.name,
       address: homePass.address,
       coordinate: homePass.coordinate,

@@ -9,7 +9,7 @@ export default class extends BaseSchema {
       DO $$
       BEGIN
         IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'type_enum') THEN
-          CREATE TYPE type_enum AS ENUM ('Fiberstar', 'CGS', 'SIP');
+          CREATE TYPE type_enum AS ENUM ('Fiberstar', 'CGS', 'SIP', 'CGS Splitter', 'SIP Splitter', 'Fiberstar Splitter', 'CGS Customer', 'SIP Customer', 'Fiberstar Customer');
         END IF;
       END$$;
     `)
@@ -18,6 +18,7 @@ export default class extends BaseSchema {
       table.increments('id')
       table.string('homepass_id').nullable()
       table.string('service_id').nullable()
+      table.string('splitter_id').nullable()
       table.string('name').nullable()
       table.string('address').nullable()
       table.string('coordinate')
