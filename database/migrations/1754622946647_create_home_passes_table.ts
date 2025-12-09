@@ -1,10 +1,10 @@
+// 0003_home_pass.ts
 import { BaseSchema } from '@adonisjs/lucid/schema'
 
 export default class HomePass extends BaseSchema {
   protected tableName = 'home_pass'
 
   public async up() {
-    // Buat ENUM type di PostgreSQL jika belum ada
     this.schema.raw(`
       DO $$
       BEGIN
@@ -14,7 +14,6 @@ export default class HomePass extends BaseSchema {
       END$$;
     `)
 
-    // Buat tabel utama
     this.schema.createTable(this.tableName, (table) => {
       table.string('homepass_id').primary()
       table.string('project_id')
@@ -27,8 +26,10 @@ export default class HomePass extends BaseSchema {
       table.string('district')
       table.string('sub_district')
       table.integer('postal_code')
+
       table.string('homepassed_coordinate')
-      table.specificType('homepassed_coordinate_geo', 'geometry(Point,4326)')
+      table.specificType('homepassed_coordinate_geo', 'geography(Point,4326)')
+
       table.string('homepass_type')
       table.string('resident_type').index()
       table.string('resident_name')
@@ -37,14 +38,14 @@ export default class HomePass extends BaseSchema {
       table.string('unit').nullable()
       table.string('pop_id')
       table.string('splitter_id')
-      table.string('spliter_distribusi_koordinat')
-      table.specificType('spliter_distribusi_koordinat_geo', 'geometry(Point,4326)')
-      table.date('rfs_date')
 
+      table.string('spliter_distribusi_koordinat')
+      table.specificType('spliter_distribusi_koordinat_geo', 'geography(Point,4326)')
+
+      table.date('rfs_date')
       table.specificType('type', 'type_enum').notNullable().defaultTo('Fiberstar')
     })
 
-    // Buat helper PostGIS trigger & index
     const coordColumns = ['homepassed_coordinate', 'spliter_distribusi_koordinat']
 
     this.schema.raw(`
@@ -67,7 +68,6 @@ export default class HomePass extends BaseSchema {
   }
 
   public async down() {
-    // 1️⃣ Hapus trigger & index dulu
     this.schema.raw(`
       DROP TRIGGER IF EXISTS ${this.tableName}_set_geoms_trg ON ${this.tableName};
       DROP FUNCTION IF EXISTS ${this.tableName}_set_geoms();
@@ -76,10 +76,7 @@ export default class HomePass extends BaseSchema {
     this.schema.raw(`DROP INDEX IF EXISTS ${this.tableName}_homepassed_geom_gist`)
     this.schema.raw(`DROP INDEX IF EXISTS ${this.tableName}_spliter_distribusi_koordinat_geom_gist`)
 
-    // 2️⃣ Hapus tabel
     this.schema.dropTable(this.tableName)
-
-    // 3️⃣ Opsional — hapus ENUM type kalau tidak dipakai tabel lain
     this.schema.raw(`DROP TYPE IF EXISTS type_enum`)
   }
 }
