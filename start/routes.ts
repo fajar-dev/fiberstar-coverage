@@ -15,6 +15,7 @@ router
   .group(() => {
     router.post('/list', [CoveragesController, 'index'])
     router.get('/coverage', [CoveragesController, 'find'])
+    router.get('/export', [CoveragesController, 'export'])
     router.get('/additional/type', [AdditionalsController, 'typeEnum'])
   })
   .prefix('/api')
