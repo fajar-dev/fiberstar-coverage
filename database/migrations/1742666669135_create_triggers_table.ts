@@ -3,10 +3,7 @@ import { BaseSchema } from '@adonisjs/lucid/schema'
 export default class extends BaseSchema {
   async up() {
     // Function untuk membuat trigger function secara dinamis per table
-    // Ini akan dipanggil dari migration table yang membutuhkan
     this.schema.raw(`
-      -- Function helper untuk membuat trigger function per table
-      -- Parameter: table_name, array of coordinate columns
       CREATE OR REPLACE FUNCTION create_geom_trigger_function(
         table_name TEXT,
         coord_columns TEXT[]

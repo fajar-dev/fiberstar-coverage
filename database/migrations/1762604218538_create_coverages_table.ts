@@ -1,4 +1,3 @@
-// 0004_coverages.ts
 import { BaseSchema } from '@adonisjs/lucid/schema'
 
 export default class extends BaseSchema {
@@ -27,7 +26,6 @@ export default class extends BaseSchema {
       table.string('address').nullable()
 
       table.string('coordinate')
-      // ⬇⬇⬇ penting: geography, bukan geometry
       table.specificType('coordinate_geo', 'geography(Point,4326)')
 
       table.specificType('type', 'type_enum').notNullable().defaultTo('Fiberstar')
