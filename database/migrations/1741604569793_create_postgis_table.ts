@@ -1,4 +1,3 @@
-// 0001_to_point4326.ts
 import { BaseSchema } from '@adonisjs/lucid/schema'
 
 export default class extends BaseSchema {

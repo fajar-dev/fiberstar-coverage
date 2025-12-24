@@ -9,9 +9,10 @@ export default class AdditionalsController {
 
   async typeEnum({ response }: HttpContext) {
     const result = await this.additionalService.getTypeEnumValues()
-    const values = result.map((r) => ({
+    const values = result.map((r: any) => ({
       label: r.enumlabel,
       value: r.enumlabel,
+      count: parseInt(r.count) || 0
     }))
 
     return Response.ok(response, values, 'Type Enum retrieved successfully')

@@ -81,10 +81,10 @@ export default class CoveragesController {
       serviceId: item.serviceId ?? item.serviceId ?? null,
       homepassId: item.homepassId ?? item.homepassId ?? null,
       splitterId: item.splitterId ?? item.splitterId ?? null,
+      customerId: item.customerId ?? item.customerId ?? null,
       name: item.name,
       address: item.address,
       coordinate: item.coordinate,
-      distance: item.distance,
       type: item.type,
     }))
 
@@ -92,10 +92,10 @@ export default class CoveragesController {
       'serviceId',
       'homepassId',
       'splitterId',
+      'customerId',
       'name',
       'address',
       'coordinate',
-      'distance',
       'type',
     ]
 

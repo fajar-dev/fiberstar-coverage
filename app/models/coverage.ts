@@ -14,6 +14,9 @@ export default class Coverage extends BaseModel {
   declare splitter_id: string
 
   @column()
+  declare customer_id: string
+
+  @column()
   declare name: string
 
   @column()

@@ -1,4 +1,3 @@
-// 0003_home_pass.ts
 import { BaseSchema } from '@adonisjs/lucid/schema'
 
 export default class HomePass extends BaseSchema {
