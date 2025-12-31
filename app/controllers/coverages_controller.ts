@@ -13,7 +13,7 @@ export default class CoveragesController {
     private coverageSerializer: CoverageSerialize
   ) {}
 
-  async index({ request, response }: HttpContext) {
+  async index({ request, response, auth }: HttpContext) {
     const page = request.input('page', 1)
     const limit = request.input('limit', 10)
     const payload = await request.validateUsing(coverageCheck)
@@ -23,14 +23,15 @@ export default class CoveragesController {
       page,
       limit
     )
+    const isLoggedIn = await auth.check()
     return Response.ok(
       response,
-      await this.coverageSerializer.paginate(result),
+      await this.coverageSerializer.paginate(result, isLoggedIn),
       'Home Pass retrieved successfully'
     )
   }
 
-  async find({ request, response }: HttpContext) {
+  async find({ request, response, auth }: HttpContext) {
     const longitude = Number(request.input('longitude'))
     const latitude = Number(request.input('latitude'))
     const radius = request.input('radius') ? Number(request.input('radius')) : null
@@ -42,9 +43,10 @@ export default class CoveragesController {
 
     const result = await this.coverageService.find(longitude, latitude, radius, limit)
 
+    const isLoggedIn = await auth.check()
     return Response.ok(
       response,
-      await this.coverageSerializer.collection(result),
+      await this.coverageSerializer.collection(result, isLoggedIn),
       'Home Pass retrieved successfully'
     )
   }
@@ -75,7 +77,7 @@ export default class CoveragesController {
       )
     }
 
-    const rawData = await this.coverageSerializer.collection(filteredResult)
+    const rawData = await this.coverageSerializer.collection(filteredResult, true)
 
     const data = rawData.map((item) => ({
       serviceId: item.serviceId ?? item.serviceId ?? null,

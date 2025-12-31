@@ -3,11 +3,11 @@ import { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 
 interface CoverageSerializeInterface {
   id: string
-  serviceId: string
+  serviceId: string | null
   homepassId: string
   splitterId: string
-  customerId: string
-  name: string
+  customerId: string | null
+  name: string | null
   address: string
   coordinate: string
   distance: number
@@ -32,14 +32,14 @@ interface PaginatedResponse {
 }
 
 export default class CoverageSerialize {
-  async single(homePass: Coverage): Promise<CoverageSerializeInterface> {
+  async single(homePass: Coverage, isLoggedIn: boolean = false): Promise<CoverageSerializeInterface> {
     return {
       id: homePass.id,
-      serviceId: homePass.service_id,
+      serviceId: isLoggedIn ? homePass.service_id : null,
       homepassId: homePass.homepass_id,
       splitterId: homePass.splitter_id,
-      customerId: homePass.customer_id,
-      name: homePass.name,
+      customerId: isLoggedIn ? homePass.customer_id : null,
+      name: isLoggedIn ? homePass.name : null,
       address: homePass.address,
       coordinate: homePass.coordinate,
       distance: homePass.distanceMeters ?? 0,
@@ -48,15 +48,15 @@ export default class CoverageSerialize {
   }
 
   // untuk array biasa (misalnya hasil limit)
-  async collection(datas: Coverage[]): Promise<CoverageSerializeInterface[]> {
-    return Promise.all(datas.map((coverage: Coverage) => this.single(coverage)))
+  async collection(datas: Coverage[], isLoggedIn: boolean = false): Promise<CoverageSerializeInterface[]> {
+    return Promise.all(datas.map((coverage: Coverage) => this.single(coverage, isLoggedIn)))
   }
 
   // untuk hasil paginate()
-  async paginate(datas: ModelPaginatorContract<Coverage>): Promise<PaginatedResponse> {
+  async paginate(datas: ModelPaginatorContract<Coverage>, isLoggedIn: boolean = false): Promise<PaginatedResponse> {
     return {
       meta: datas.getMeta(),
-      data: await Promise.all(datas.all().map((coverage: Coverage) => this.single(coverage))),
+      data: await Promise.all(datas.all().map((coverage: Coverage) => this.single(coverage, isLoggedIn))),
     }
   }
 }
