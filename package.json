@@ -20,6 +20,7 @@
     "#helpers/*": "./app/helpers/*.js",
     "#mails/*": "./app/mails/*.js",
     "#services/*": "./app/services/*.js",
+    "#serializers/*": "./app/serializers/*.js",
     "#listeners/*": "./app/listeners/*.js",
     "#events/*": "./app/events/*.js",
     "#middleware/*": "./app/middleware/*.js",
@@ -53,11 +54,12 @@
     "typescript": "~5.8"
   },
   "dependencies": {
-    "@adonisjs/auth": "^9.4.0",
+    "@adonisjs/auth": "^9.5.1",
     "@adonisjs/core": "^6.18.0",
     "@adonisjs/cors": "^2.2.1",
     "@adonisjs/lucid": "^21.6.1",
     "@vinejs/vine": "^3.0.1",
+    "google-auth-library": "^10.5.0",
     "json2csv": "^6.0.0-alpha.2",
     "luxon": "^3.7.1",
     "pg": "^8.16.3",

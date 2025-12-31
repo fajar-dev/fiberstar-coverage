@@ -3,7 +3,7 @@ import Response from '#helpers/response'
 import { inject } from '@adonisjs/core'
 import { CoverageService } from '#services/coverage_service'
 import { coverageCheck } from '#validators/coverage'
-import CoverageSerialize from '../serializers/coverages_serializer.js'
+import CoverageSerialize from '#serializers/coverages_serializer'
 import { Parser as Json2CsvParser } from 'json2csv'
 
 @inject()
