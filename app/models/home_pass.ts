@@ -8,72 +8,72 @@ export default class HomePass extends BaseModel {
   @column({ isPrimary: true })
   declare homepassId: string
 
-  @column()
+  @column({ columnName: 'project_id' })
   declare projectId: string
 
-  @column()
+  @column({ columnName: 'project_name' })
   declare projectName: string
 
-  @column()
+  @column({ columnName: 'region' })
   declare region: string
 
-  @column()
+  @column({ columnName: 'sub_region' })
   declare subRegion: string
 
-  @column()
+  @column({ columnName: 'area_name' })
   declare areaName: string
 
-  @column()
+  @column({ columnName: 'province' })
   declare province: string
 
-  @column()
+  @column({ columnName: 'city' })
   declare city: string
 
-  @column()
+  @column({ columnName: 'district' })
   declare district: string
 
-  @column()
+  @column({ columnName: 'sub_district' })
   declare subDistrict: string
 
-  @column()
+  @column({ columnName: 'postal_code' })
   declare postalCode: number
 
-  @column()
+  @column({ columnName: 'homepassed_coordinate' })
   declare homepassedCoordinate: string
 
-  @column()
+  @column({ columnName: 'homepass_type' })
   declare homepassType: string
 
-  @column()
+  @column({ columnName: 'resident_type' })
   declare residentType: string
 
-  @column()
+  @column({ columnName: 'resident_name' })
   declare residentName: string
 
-  @column()
+  @column({ columnName: 'street_name' })
   declare streetName: string
 
-  @column()
+  @column({ columnName: 'no' })
   declare no: string | null
 
-  @column()
+  @column({ columnName: 'unit' })
   declare unit: string | null
 
-  @column()
+  @column({ columnName: 'pop_id' })
   declare popId: string | null
 
-  @column()
+  @column({ columnName: 'splitter_id' })
   declare splitterId: string | null
 
-  @column()
+  @column({ columnName: 'spliter_distribusi_koordinat' })
   declare spliterDistribusiKoordinat: string | null
 
-  @column()
+  @column({ columnName: 'rfs_date' })
   declare rfsDate: Date
 
-  @column()
+  @column({ columnName: 'distance_meters' })
   declare distanceMeters?: number
 
-  @column()
+  @column({ columnName: 'type' })
   declare type: string
 }

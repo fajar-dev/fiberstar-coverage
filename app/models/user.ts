@@ -14,31 +14,31 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column({ isPrimary: true })
   declare id: number
 
-  @column()
+  @column({ columnName: 'sub' })
   declare sub: string | null
 
-  @column()
+  @column({ columnName: 'name' })
   declare name: string | null
 
-  @column()
+  @column({ columnName: 'email' })
   declare email: string
 
   @column({ serializeAs: null })
   declare password: string
 
-  @column()
+  @column({ columnName: 'picture' })
   declare picture: string | null
 
-  @column()
+  @column({ columnName: 'last_login_ip' })
   declare lastLoginIp: string | null
 
-  @column()
+  @column({ columnName: 'last_login_at' })
   declare lastLoginAt: DateTime | null
 
-  @column.dateTime({ autoCreate: true })
+  @column({ columnName: 'created_at' })
   declare createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  @column.dateTime({ autoCreate: true, autoUpdate: true, columnName: 'updated_at' })
   declare updatedAt: DateTime | null
 
   static accessTokens = DbAccessTokensProvider.forModel(User)

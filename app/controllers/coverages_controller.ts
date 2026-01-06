@@ -2,7 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import Response from '#helpers/response'
 import { inject } from '@adonisjs/core'
 import { CoverageService } from '#services/coverage_service'
-import { coverageCheck } from '#validators/coverage'
+import { coverageCheck, coverageCreate } from '#validators/coverage'
 import CoverageSerialize from '#serializers/coverages_serializer'
 import { Parser as Json2CsvParser } from 'json2csv'
 
@@ -49,6 +49,12 @@ export default class CoveragesController {
       await this.coverageSerializer.collection(result, isLoggedIn),
       'Home Pass retrieved successfully'
     )
+  }
+
+  async create({ request, response }: HttpContext) {
+    const payload = await request.validateUsing(coverageCreate)
+    const result = await this.coverageService.create(payload.homepassId, payload.serviceId, payload.splitterId, payload.customerId, payload.name, payload.address, payload.longitude, payload.latitude, payload.type)
+    return Response.ok(response, result, 'Home Pass created successfully')
   }
 
   async export({ request, response }: HttpContext) {

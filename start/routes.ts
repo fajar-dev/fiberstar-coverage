@@ -18,6 +18,7 @@ router
     router.post('/list', [CoveragesController, 'index'])
     router.get('/coverage', [CoveragesController, 'find'])
     router.get('/export', [CoveragesController, 'export']).use(middleware.auth())
+    router.post('/create', [CoveragesController, 'create']).use(middleware.auth())
     router.get('/additional/type', [AdditionalsController, 'typeEnum'])
     router.group(() => {
       router.post('/login', [AuthController, 'login'])

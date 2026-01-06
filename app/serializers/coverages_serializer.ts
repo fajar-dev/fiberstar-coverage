@@ -4,11 +4,11 @@ import { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 interface CoverageSerializeInterface {
   id: string
   serviceId: string | null
-  homepassId: string
-  splitterId: string
+  homepassId: string | null
+  splitterId: string | null
   customerId: string | null
   name: string | null
-  address: string
+  address: string | null
   coordinate: string
   distance: number
   type: string
@@ -35,10 +35,10 @@ export default class CoverageSerialize {
   async single(homePass: Coverage, isLoggedIn: boolean = false): Promise<CoverageSerializeInterface> {
     return {
       id: homePass.id,
-      serviceId: isLoggedIn ? homePass.service_id : null,
-      homepassId: homePass.homepass_id,
-      splitterId: homePass.splitter_id,
-      customerId: isLoggedIn ? homePass.customer_id : null,
+      serviceId: isLoggedIn ? homePass.serviceId : null,
+      homepassId: homePass.homepassId,
+      splitterId: homePass.splitterId,
+      customerId: isLoggedIn ? homePass.customerId : null,
       name: isLoggedIn ? homePass.name : null,
       address: homePass.address,
       coordinate: homePass.coordinate,

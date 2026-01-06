@@ -24,7 +24,7 @@ export default class extends BaseSchema {
       table.string('splitter_id').nullable()
       table.string('customer_id').nullable()
       table.string('name').nullable()
-      table.string('address').nullable()
+      table.text('address').nullable()
 
       table.string('coordinate')
       table.specificType('coordinate_geo', 'geography(Point,4326)')

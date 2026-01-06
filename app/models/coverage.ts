@@ -4,30 +4,30 @@ export default class Coverage extends BaseModel {
   @column({ isPrimary: true })
   declare id: string
 
-  @column()
-  declare homepass_id: string
+  @column({ columnName: 'homepass_id' })
+  declare homepassId: string | null
 
-  @column()
-  declare service_id: string
+  @column({ columnName: 'service_id' })
+  declare serviceId: string | null
 
-  @column()
-  declare splitter_id: string
+  @column({ columnName: 'splitter_id' })
+  declare splitterId: string | null
 
-  @column()
-  declare customer_id: string
+  @column({ columnName: 'customer_id' })
+  declare customerId: string | null
 
-  @column()
-  declare name: string
+  @column({ columnName: 'name' })
+  declare name: string | null
 
-  @column()
-  declare address: string
+  @column({ columnName: 'address' })
+  declare address: string | null
 
-  @column()
+  @column({ columnName: 'coordinate' })
   declare coordinate: string
 
-  @column()
+  @column({ columnName: 'distance_meters' })
   declare distanceMeters?: number
 
-  @column()
+  @column({ columnName: 'type' })
   declare type: string
 }

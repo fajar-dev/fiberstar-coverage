@@ -32,6 +32,51 @@ export class CoverageService {
     return query
   }
 
+  async create(
+    homepassId: string | null,
+    serviceId: string | null,
+    splitterId: string | null,
+    customerId: string | null,
+    name: string | null,
+    address: string | null,
+    longitude: number,
+    latitude: number,
+    type: string
+  ): Promise<Coverage> {
+    const coordinate = `${latitude}, ${longitude}`
+
+    const existing = await Coverage
+      .query()
+      .where('coordinate', coordinate)
+      .where('type', type)
+      .first()
+
+    if (existing) {
+      existing.merge({
+        homepassId,
+        serviceId,
+        splitterId,
+        customerId,
+        name,
+        address,
+      })
+
+      await existing.save()
+      return existing
+    }
+
+    return Coverage.create({
+      homepassId,
+      serviceId,
+      splitterId,
+      customerId,
+      name,
+      address,
+      coordinate,
+      type,
+    })
+  }
+
   /**
    * @param longitude number
    * @param latitude number
