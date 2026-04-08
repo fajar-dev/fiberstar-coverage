@@ -7,6 +7,20 @@ export const coverageCheck = vine.compile(
   })
 )
 
+export const coverageFind = vine.compile(
+  vine.object({
+    longitude: vine.number(),
+    latitude: vine.number(),
+    radius: vine.number().optional(),
+    limit: vine.number().optional(),
+    ne_lat: vine.number().optional(),
+    ne_lng: vine.number().optional(),
+    sw_lat: vine.number().optional(),
+    sw_lng: vine.number().optional(),
+    type: vine.string().optional(),
+  })
+)
+
 export const coverageCreate = vine.compile(
   vine.object({
     homepassId: vine.string().nullable(),

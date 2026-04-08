@@ -87,7 +87,13 @@ export class CoverageService {
     longitude: number,
     latitude: number,
     radius: number | null,
-    limit: number | null
+    limit: number | null,
+    bounds?: {
+      neLat: number
+      neLng: number
+      swLat: number
+      swLng: number
+    }
   ): Promise<Coverage[]> {
     const pointSql = 'ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography'
 
@@ -101,7 +107,12 @@ export class CoverageService {
       )
       .whereNotNull('coordinate_geo')
 
-    if (radius) {
+    if (bounds) {
+      query.andWhereRaw(
+        'coordinate_geo::geometry @ ST_MakeEnvelope(?, ?, ?, ?, 4326)',
+        [bounds.swLng, bounds.swLat, bounds.neLng, bounds.neLat]
+      )
+    } else if (radius) {
       query.andWhereRaw(`ST_DWithin(coordinate_geo, ${pointSql}, ?)`, [longitude, latitude, radius])
     }
 

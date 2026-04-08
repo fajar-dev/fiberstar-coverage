@@ -2,7 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import Response from '#helpers/response'
 import { inject } from '@adonisjs/core'
 import { CoverageService } from '#services/coverage_service'
-import { coverageCheck, coverageCreate } from '#validators/coverage'
+import { coverageCheck, coverageCreate, coverageFind } from '#validators/coverage'
 import CoverageSerialize from '#serializers/coverages_serializer'
 import { Parser as Json2CsvParser } from 'json2csv'
 
@@ -32,16 +32,25 @@ export default class CoveragesController {
   }
 
   async find({ request, response, auth }: HttpContext) {
-    const longitude = Number(request.input('longitude'))
-    const latitude = Number(request.input('latitude'))
-    const radius = request.input('radius') ? Number(request.input('radius')) : null
-    const limit = request.input('limit') ? Number(request.input('limit')) : null
+    const payload = await request.validateUsing(coverageFind)
 
-    if (!longitude || !latitude) {
-      return Response.badRequest(response, 'Longitude and latitude are required')
+    let bounds
+    if (payload.ne_lat && payload.ne_lng && payload.sw_lat && payload.sw_lng) {
+      bounds = {
+        neLat: payload.ne_lat,
+        neLng: payload.ne_lng,
+        swLat: payload.sw_lat,
+        swLng: payload.sw_lng,
+      }
     }
 
-    const result = await this.coverageService.find(longitude, latitude, radius, limit)
+    const result = await this.coverageService.find(
+      payload.longitude,
+      payload.latitude,
+      payload.radius ?? null,
+      payload.limit ?? null,
+      bounds
+    )
 
     const isLoggedIn = await auth.check()
     return Response.ok(
@@ -58,22 +67,30 @@ export default class CoveragesController {
   }
 
   async export({ request, response }: HttpContext) {
-    const longitude = Number(request.input('longitude'))
-    const latitude = Number(request.input('latitude'))
-    const radius = request.input('radius') ? Number(request.input('radius')) : null
-    const limit = request.input('limit') ? Number(request.input('limit')) : null
-    const typeParam = request.input('type')
+    const payload = await request.validateUsing(coverageFind)
 
-    if (Number.isNaN(longitude) || Number.isNaN(latitude)) {
-      return Response.badRequest(response, 'Longitude and latitude are required')
+    let bounds
+    if (payload.ne_lat && payload.ne_lng && payload.sw_lat && payload.sw_lng) {
+      bounds = {
+        neLat: payload.ne_lat,
+        neLng: payload.ne_lng,
+        swLat: payload.sw_lat,
+        swLng: payload.sw_lng,
+      }
     }
 
-    const result = await this.coverageService.find(longitude, latitude, radius, limit)
+    const result = await this.coverageService.find(
+      payload.longitude,
+      payload.latitude,
+      payload.radius ?? null,
+      payload.limit ?? null,
+      bounds
+    )
 
     let filteredResult = result
 
-    if (typeParam) {
-      const allowedTypes = String(typeParam)
+    if (payload.type) {
+      const allowedTypes = String(payload.type)
         .split(',')
         .map((t) => t.trim().toLowerCase())
         .filter((t) => t.length > 0)
