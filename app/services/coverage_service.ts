@@ -112,7 +112,9 @@ export class CoverageService {
         'coordinate_geo::geometry @ ST_MakeEnvelope(?, ?, ?, ?, 4326)',
         [bounds.swLng, bounds.swLat, bounds.neLng, bounds.neLat]
       )
-    } else if (radius) {
+    }
+
+    if (radius) {
       query.andWhereRaw(`ST_DWithin(coordinate_geo, ${pointSql}, ?)`, [longitude, latitude, radius])
     }
 
