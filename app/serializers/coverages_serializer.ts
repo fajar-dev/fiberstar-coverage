@@ -12,6 +12,7 @@ interface CoverageSerializeInterface {
   coordinate: string
   distance: number
   type: string
+  isUsed: boolean
 }
 
 interface PaginationMeta {
@@ -44,6 +45,7 @@ export default class CoverageSerialize {
       coordinate: homePass.coordinate,
       distance: homePass.distanceMeters ?? 0,
       type: homePass.type,
+      isUsed: homePass.isUsed ?? false,
     }
   }
 

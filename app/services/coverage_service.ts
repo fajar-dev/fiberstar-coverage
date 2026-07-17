@@ -2,6 +2,26 @@ import Coverage from '#models/coverage'
 import db from '@adonisjs/lucid/services/db'
 import { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 
+/**
+ * Menandai apakah sebuah homepass (type IForte / Fiberstar) sudah dipakai
+ * oleh pelanggan, yaitu bila ada baris lain dengan homepass_id yang sama
+ * dan type-nya versi "<type> Customer" (IForte -> IForte Customer,
+ * Fiberstar -> Fiberstar Customer).
+ */
+const IS_USED_SQL = `
+  CASE
+    WHEN coverages.type IN ('IForte', 'Fiberstar')
+      AND coverages.homepass_id IS NOT NULL
+      AND EXISTS (
+        SELECT 1 FROM coverages c2
+        WHERE c2.homepass_id = coverages.homepass_id
+          AND c2.type = (coverages.type::text || ' Customer')::type_enum
+      )
+    THEN true
+    ELSE false
+  END AS is_used
+`
+
 export class CoverageService {
   /**
    * @param longitude number
@@ -23,7 +43,8 @@ export class CoverageService {
         db.rawQuery(
           `ST_Distance(coordinate_geo::geography, ${pointSql}::geography) AS distance_meters`,
           [longitude, latitude]
-        )
+        ),
+        db.rawQuery(IS_USED_SQL)
       )
       .whereNotNull('coordinate_geo')
       .orderByRaw(`coordinate_geo <-> ${pointSql}`, [longitude, latitude])
@@ -48,7 +69,6 @@ export class CoverageService {
     const existing = await Coverage
       .query()
       .where('coordinate', coordinate)
-      .where('type', type)
       .first()
 
     if (existing) {
@@ -59,6 +79,7 @@ export class CoverageService {
         customerId,
         name,
         address,
+        type,
       })
 
       await existing.save()
@@ -103,7 +124,8 @@ export class CoverageService {
         db.rawQuery(`ST_Distance(coordinate_geo, ${pointSql}) AS distance_meters`, [
           longitude,
           latitude,
-        ])
+        ]),
+        db.rawQuery(IS_USED_SQL)
       )
       .whereNotNull('coordinate_geo')
 
