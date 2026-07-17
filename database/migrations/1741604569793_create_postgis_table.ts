@@ -2,6 +2,7 @@ import { BaseSchema } from '@adonisjs/lucid/schema'
 
 export default class extends BaseSchema {
   async up() {
+    this.schema.raw('DROP FUNCTION IF EXISTS to_point4326(TEXT);')
     this.schema.raw(`
       CREATE OR REPLACE FUNCTION to_point4326(coord TEXT)
       RETURNS geography AS $$
