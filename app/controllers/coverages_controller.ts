@@ -111,6 +111,7 @@ export default class CoveragesController {
       address: item.address,
       coordinate: item.coordinate,
       type: item.type,
+      isUsed: item.isUsed ? 'Ya' : 'Tidak',
     }))
 
     const fields = [
@@ -122,6 +123,7 @@ export default class CoveragesController {
       'address',
       'coordinate',
       'type',
+      'isUsed',
     ]
 
     const parser = new Json2CsvParser({

@@ -30,4 +30,7 @@ export default class Coverage extends BaseModel {
 
   @column({ columnName: 'type' })
   declare type: string
+
+  @column({ columnName: 'is_used' })
+  declare isUsed?: boolean
 }
